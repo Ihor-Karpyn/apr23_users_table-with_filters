@@ -1,4 +1,4 @@
-export interface Person {
+export interface User {
   born: number;
   died: number;
   fatherName: string | null;

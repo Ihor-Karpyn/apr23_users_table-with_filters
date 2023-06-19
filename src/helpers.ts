@@ -1,50 +1,18 @@
-import { Person } from './types/Person';
+import { User } from './types/User';
 
-interface SortOptions {
-  users: Person[],
-  sortBy: keyof Person | null,
-  isReverse: boolean,
-}
+export const filterUsers = (args: { users: User[], searchQuery: string }) => {
+  const { users, searchQuery } = args;
 
-export const sortUsersBy = (options: SortOptions) => {
-  const { users: initialUsers, isReverse, sortBy } = options;
+  const preparedSearchQuery = searchQuery.toLowerCase();
 
-  const users = [...initialUsers];
+  return users.filter(user => {
+    const checkString = `
+      ${user.slug.toLowerCase()}
+      ${user.name.toLowerCase()}
+      ${user.fatherName?.toLowerCase() || ''}
+      ${user.motherName?.toLowerCase() || ''}
+    `;
 
-  if (sortBy === null) {
-    return users;
-  }
-
-  const sortedUsers = users.sort((a, b) => {
-    switch (sortBy) {
-      case 'born':
-      case 'died':
-        return a[sortBy] - b[sortBy];
-
-      case 'sex':
-      case 'slug':
-      case 'fatherName':
-      case 'motherName':
-      case 'name':
-        const aField = a[sortBy];
-        const bField = b[sortBy];
-
-        if (aField === null) {
-          return -1;
-        }
-
-        if (bField === null) {
-          return 1;
-        }
-
-        return aField.localeCompare(bField);
-
-      default:
-        return 0;
-    }
+    return checkString.includes(preparedSearchQuery);
   });
-
-  return isReverse
-    ? sortedUsers.reverse()
-    : sortedUsers;
 };
