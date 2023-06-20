@@ -1,18 +1,23 @@
-import { User } from './types/User';
+import { Color, Good, GoodWithColor } from './types/types';
 
-export const filterUsers = (args: { users: User[], searchQuery: string }) => {
-  const { users, searchQuery } = args;
+export const findColorById = (colors: Color[], id: number) => {
+  return colors.find(color => color.id === id) || null;
+};
 
-  const preparedSearchQuery = searchQuery.toLowerCase();
+export const prepareGood = (
+  goods: Good[], colors: Color[],
+): GoodWithColor[] => {
+  return goods.map(good => ({
+    ...good,
+    color: findColorById(colors, good.colorId),
+  }));
+};
 
-  return users.filter(user => {
-    const checkString = `
-      ${user.slug.toLowerCase()}
-      ${user.name.toLowerCase()}
-      ${user.fatherName?.toLowerCase() || ''}
-      ${user.motherName?.toLowerCase() || ''}
-    `;
+export const getNewId = (arr: { id: number }[]): number => {
+  const ids = arr.map((item) => item.id);
+  const maxId = Math.max(...ids);
 
-    return checkString.includes(preparedSearchQuery);
-  });
+  return Number.isFinite(maxId)
+    ? maxId + 1
+    : 1;
 };
