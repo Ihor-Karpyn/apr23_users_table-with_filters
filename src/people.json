@@ -59,7 +59,7 @@
     "born": 1535,
     "died": 1582,
     "fatherName": "N. van Haverbeke",
-    "motherName": null,
+    "motherName": false,
     "slug": "pauwels-van-haverbeke-1535"
   },
   {
